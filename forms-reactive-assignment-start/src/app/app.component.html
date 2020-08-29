@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <div>
+          <p>Create a Form with the following Controls and Validators</p>
+          <p>1) Project Name (should not be empty)</p>
+          <p>2) Mail (should not be a empty and a valid email)</p>
+          <p>3) Project Status Dropdown, with three values: 'Stable', 'Critical', 'Finished'</p>
+          <p>4) Submit Button</p>
+          <p>Add your own Validator which doesn't allow "Test" as a Project Name</p>
+          <p>Also implement that Validator as an async Validator (replace the other one)</p>
+          <p>Upon submitting the form, simply print the value to the console</p>
+      </div>
+      <hr/>
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+        <div formGroupName="userData">
+          <div class="form-group">
+            <label for="projectname">Project Name</label>
+            <input type="text" id="projectname" formControlName="projectname" class="form-control">
+          </div>
+          <span class="help-block" *ngIf='!projectForm.get("userData.projectname").valid && projectForm.get("userData.projectname").touched'>
+            <span class="help-block" *ngIf='projectForm.get("userData.projectname").errors?.required'>Project Name field is required!</span>
+            <span class="help-block" *ngIf='projectForm.errors["invalidProjectName"]'>This project name is invalid!</span>
+          </span>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input type="email" id="email" formControlName="email" class="form-control">
+          </div>
+          <span class="help-block" *ngIf='!projectForm.get("userData.email").valid && projectForm.get("userData.email").touched'>
+            <span class="help-block" *ngIf='projectForm.get("userData.projectname").errors?.required'>Email field is required!</span>
+            <span class="help-block" *ngIf='projectForm.get("userData.projectname").errors["email"]'>Email field is invalid!</span>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="projectStatus">Project Status</label>
+          <select id="projectStatus" formControlName='projectStatus' class='form-control'>
+            <option *ngFor="let pStatus of projectStatuses" [value]="pStatus">{{ pStatus }}</option>
+          </select>
+        </div>
+        <span
+          *ngIf="!projectForm.valid && projectForm.touched"
+          class="help-block">
+          Please enter a valid Data in all fields!
+        </span>
+        <button class="btn btn-primary" type="submit" [disabled]='!projectForm.valid'>Submit</button>
+      </form>
+    </div>
+  </div>
+  <hr/>
+  <div class="row" *ngIf='submitted'>
+    <div class="col-xs-12 centerdata">
+    <h3>Project Data</h3>
+    <p><b>Project Name:</b> {{ project.projectname }}</p>
+    <p><b>Mail:</b> {{ project.email }}</p>
+    <p><b>Status:</b> {{ projectStatus }}</p>
+  </div>
+</div>
